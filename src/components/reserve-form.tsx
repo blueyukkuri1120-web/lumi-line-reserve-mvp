@@ -3,15 +3,17 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useLiffProfile } from "@/lib/use-liff-profile";
+import { withBasePath } from "@/lib/public-paths";
 import { MenuRow } from "@/lib/types";
 
 interface ReserveFormProps {
   menus: MenuRow[];
   today: string;
   liffId?: string;
+  basePath?: string;
 }
 
-export function ReserveForm({ menus, today, liffId }: ReserveFormProps) {
+export function ReserveForm({ menus, today, liffId, basePath }: ReserveFormProps) {
   const router = useRouter();
   const { profile, error: liffError, isReady } = useLiffProfile(liffId);
   const [customerName, setCustomerName] = useState("");
@@ -105,7 +107,7 @@ export function ReserveForm({ menus, today, liffId }: ReserveFormProps) {
         throw new Error(payload.error ?? "予約の保存に失敗しました。");
       }
 
-      router.push(`/reserve/complete/${payload.reservationCode}`);
+      router.push(withBasePath(basePath, `/reserve/complete/${payload.reservationCode}`));
     } catch (submitError) {
       setError(submitError instanceof Error ? submitError.message : "予約の保存に失敗しました。");
     } finally {

@@ -8,7 +8,7 @@ export function LiffBootstrap() {
   const pathname = usePathname();
 
   useEffect(() => {
-    if (pathname !== "/") {
+    if (pathname !== "/line") {
       return;
     }
 

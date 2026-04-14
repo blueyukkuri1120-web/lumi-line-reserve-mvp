@@ -1,12 +1,14 @@
 import { ReactNode } from "react";
 import { MiniAppLink } from "@/components/mini-app-link";
+import { withBasePath } from "@/lib/public-paths";
 
 interface PublicShellProps {
   salonName: string;
   children: ReactNode;
+  basePath?: string;
 }
 
-export function PublicShell({ salonName, children }: PublicShellProps) {
+export function PublicShell({ salonName, children, basePath }: PublicShellProps) {
   return (
     <main className="min-h-screen bg-[radial-gradient(circle_at_top,_rgba(215,183,108,0.15),_transparent_35%),linear-gradient(180deg,_#070707_0%,_#121212_18%,_#f5f0e6_18%,_#f7f4ee_100%)] text-stone-900">
       <div className="mx-auto flex min-h-screen w-full max-w-md flex-col px-4 pb-16 pt-6 sm:max-w-5xl sm:px-6">
@@ -24,16 +26,16 @@ export function PublicShell({ salonName, children }: PublicShellProps) {
             </div>
           </div>
           <nav className="mt-5 grid grid-cols-2 gap-2 text-sm sm:grid-cols-4">
-            <MiniAppLink className="rounded-full border border-white/10 px-3 py-2 text-center text-stone-100 transition hover:border-amber-300/40 hover:text-amber-100" href="/">
+            <MiniAppLink className="rounded-full border border-white/10 px-3 py-2 text-center text-stone-100 transition hover:border-amber-300/40 hover:text-amber-100" href={withBasePath(basePath, "/")}>
               トップ
             </MiniAppLink>
-            <MiniAppLink className="rounded-full border border-white/10 px-3 py-2 text-center text-stone-100 transition hover:border-amber-300/40 hover:text-amber-100" href="/reserve">
+            <MiniAppLink className="rounded-full border border-white/10 px-3 py-2 text-center text-stone-100 transition hover:border-amber-300/40 hover:text-amber-100" href={withBasePath(basePath, "/reserve")}>
               予約する
             </MiniAppLink>
-            <MiniAppLink className="rounded-full border border-white/10 px-3 py-2 text-center text-stone-100 transition hover:border-amber-300/40 hover:text-amber-100" href="/reservation/check">
+            <MiniAppLink className="rounded-full border border-white/10 px-3 py-2 text-center text-stone-100 transition hover:border-amber-300/40 hover:text-amber-100" href={withBasePath(basePath, "/reservation/check")}>
               予約確認
             </MiniAppLink>
-            <MiniAppLink className="rounded-full border border-white/10 px-3 py-2 text-center text-stone-100 transition hover:border-amber-300/40 hover:text-amber-100" href="/reservation/manage">
+            <MiniAppLink className="rounded-full border border-white/10 px-3 py-2 text-center text-stone-100 transition hover:border-amber-300/40 hover:text-amber-100" href={withBasePath(basePath, "/reservation/manage")}>
               変更・キャンセル
             </MiniAppLink>
           </nav>
