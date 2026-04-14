@@ -3,7 +3,7 @@ export {};
 declare global {
   interface Window {
     liff?: {
-      init: (options: { liffId: string }) => Promise<void>;
+      init: (options: { liffId: string; withLoginOnExternalBrowser?: boolean }) => Promise<void>;
       isLoggedIn: () => boolean;
       login: () => void;
       isInClient: () => boolean;

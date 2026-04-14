@@ -10,7 +10,7 @@ const actions = [
   {
     href: "/reserve",
     title: "予約する",
-    description: "空き状況を見ながら、そのまま予約まで進めます。",
+    description: "空き枠を見ながら、そのまま予約まで進めます。",
   },
   {
     href: "/reservation/check",
@@ -20,42 +20,17 @@ const actions = [
   {
     href: "/reservation/manage",
     title: "変更・キャンセル",
-    description: "変更申請やキャンセルをLINE導線のまま送れます。",
+    description: "変更申請やキャンセルをLINE上で送れます。",
   },
   {
     href: "/access",
     title: "アクセス",
-    description: "住所・営業時間・Googleマップを確認できます。",
+    description: "住所、営業時間、地図を確認できます。",
   },
 ];
 
-export default async function LineHomePage({
-  searchParams,
-}: {
-  searchParams: Promise<Record<string, string | string[] | undefined>>;
-}) {
-  const params = await searchParams;
+export default async function LineHomePage() {
   const settings = await getBusinessSettings();
-  const isBootingFromLiff =
-    typeof params["liff.state"] === "string" ||
-    typeof params.access_token === "string" ||
-    typeof params.id_token === "string";
-
-  if (isBootingFromLiff) {
-    return (
-      <main className="min-h-screen bg-[radial-gradient(circle_at_top,_rgba(215,183,108,0.15),_transparent_35%),linear-gradient(180deg,_#070707_0%,_#121212_18%,_#f5f0e6_18%,_#f7f4ee_100%)] text-stone-900">
-        <div className="mx-auto flex min-h-screen w-full max-w-md items-center justify-center px-6">
-          <div className="w-full rounded-[2rem] border border-white/10 bg-black/90 px-6 py-10 text-center text-white shadow-[0_20px_60px_rgba(0,0,0,0.35)]">
-            <p className="text-xs uppercase tracking-[0.35em] text-amber-200/80">Lumi Line Reserve</p>
-            <h1 className="mt-4 font-serif text-2xl">LINEから読み込み中です</h1>
-            <p className="mt-3 text-sm leading-7 text-stone-300">
-              予約画面へ接続しています。数秒たっても切り替わらない場合は、もう一度リッチメニューから開いてください。
-            </p>
-          </div>
-        </div>
-      </main>
-    );
-  }
 
   return (
     <PublicShell salonName={settings.salon_name} basePath="/line">
@@ -70,7 +45,7 @@ export default async function LineHomePage({
           </div>
         </div>
         <p className="mt-4 text-sm leading-7 text-stone-600">
-          LINE内でそのまま予約・確認・変更申請・アクセス確認まで進める、1人サロン向けの予約導線です。
+          LINE内ブラウザでそのまま予約、確認、変更申請、アクセス確認まで進められる1人サロン向けの予約導線です。
         </p>
         <div className="mt-6 grid gap-3">
           {actions.map((action) => (
