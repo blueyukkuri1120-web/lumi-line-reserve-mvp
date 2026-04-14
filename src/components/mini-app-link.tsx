@@ -1,24 +1,7 @@
-import Link from "next/link";
-import { ReactNode } from "react";
-import { getOptionalEnv } from "@/lib/env";
+"use client";
 
-function normalizePath(path: string) {
-  if (path === "/") {
-    return "";
-  }
-
-  return path.startsWith("/") ? path : `/${path}`;
-}
-
-function resolveHref(path: string) {
-  const liffId = getOptionalEnv("NEXT_PUBLIC_LIFF_ID");
-
-  if (liffId) {
-    return `https://miniapp.line.me/${liffId}${normalizePath(path)}`;
-  }
-
-  return path;
-}
+import { useRouter } from "next/navigation";
+import { MouseEvent, ReactNode } from "react";
 
 export function MiniAppLink({
   href,
@@ -29,9 +12,16 @@ export function MiniAppLink({
   className?: string;
   children: ReactNode;
 }) {
+  const router = useRouter();
+
+  const handleClick = (event: MouseEvent<HTMLAnchorElement>) => {
+    event.preventDefault();
+    router.push(href);
+  };
+
   return (
-    <Link className={className} href={resolveHref(href)}>
+    <a className={className} href={href} onClick={handleClick}>
       {children}
-    </Link>
+    </a>
   );
 }
