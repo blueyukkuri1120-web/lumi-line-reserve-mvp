@@ -23,6 +23,15 @@ async function callLineApi(path: string, payload: unknown) {
   }
 }
 
+function getMiniAppUrl() {
+  const liffId = getOptionalEnv("NEXT_PUBLIC_LIFF_ID");
+  if (!liffId) {
+    return null;
+  }
+
+  return `https://miniapp.line.me/${liffId}`;
+}
+
 export function verifyLineSignature(rawBody: string, signature: string | null) {
   if (!signature) {
     return false;
@@ -55,22 +64,26 @@ export async function pushLineMessages(to: string, messages: LineTextMessage[]) 
 
 export function buildGuideMessage(keyword?: string) {
   const appUrl = getAppUrl();
+  const miniAppUrl = getMiniAppUrl();
   const pieces = [
     "Lumi Line Reserve です。",
     "ご希望の操作はこちらからお進みください。",
-    "",
-    `予約する: ${appUrl}/reserve`,
-    `予約確認: ${appUrl}/reservation/check`,
-    `変更・キャンセル: ${appUrl}/reservation/manage`,
-    `アクセス: ${appUrl}/access`,
   ];
 
   if (keyword) {
     pieces.unshift(`「${keyword}」のご案内です。`);
   }
 
-  if (getOptionalEnv("NEXT_PUBLIC_LIFF_ID")) {
-    pieces.push("", "LINE公式アカウントのリッチメニューから開く場合は、同じ URL を LIFF のエンドポイント URL に設定してください。");
+  if (miniAppUrl) {
+    pieces.push("", `LINEミニアプリを開く: ${miniAppUrl}`);
+    pieces.push("ミニアプリ内で「予約する / 予約確認 / 変更・キャンセル / アクセス」を選べます。");
+    pieces.push("", `ブラウザで直接開く場合: ${appUrl}`);
+  } else {
+    pieces.push("");
+    pieces.push(`予約する: ${appUrl}/reserve`);
+    pieces.push(`予約確認: ${appUrl}/reservation/check`);
+    pieces.push(`変更・キャンセル: ${appUrl}/reservation/manage`);
+    pieces.push(`アクセス: ${appUrl}/access`);
   }
 
   return pieces.join("\n");
