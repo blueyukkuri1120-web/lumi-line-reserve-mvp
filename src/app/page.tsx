@@ -1,4 +1,4 @@
-import Link from "next/link";
+import { MiniAppLink } from "@/components/mini-app-link";
 import { PublicShell } from "@/components/public-shell";
 import { getBusinessSettings } from "@/lib/reservations";
 import { getHolidaySummary } from "@/lib/utils";
@@ -49,7 +49,7 @@ export default async function HomePage() {
         </p>
         <div className="mt-6 grid gap-3">
           {actions.map((action) => (
-            <Link
+            <MiniAppLink
               className="group rounded-[1.5rem] border border-stone-200 bg-stone-50 px-5 py-4 transition hover:border-amber-300 hover:bg-white"
               href={action.href}
               key={action.href}
@@ -61,7 +61,7 @@ export default async function HomePage() {
                 </div>
                 <span className="text-2xl text-amber-700 transition group-hover:translate-x-1">›</span>
               </div>
-            </Link>
+            </MiniAppLink>
           ))}
         </div>
       </section>

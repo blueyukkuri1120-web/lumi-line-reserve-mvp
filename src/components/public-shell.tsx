@@ -1,5 +1,5 @@
-import Link from "next/link";
 import { ReactNode } from "react";
+import { MiniAppLink } from "@/components/mini-app-link";
 
 interface PublicShellProps {
   salonName: string;
@@ -24,18 +24,18 @@ export function PublicShell({ salonName, children }: PublicShellProps) {
             </div>
           </div>
           <nav className="mt-5 grid grid-cols-2 gap-2 text-sm sm:grid-cols-4">
-            <Link className="rounded-full border border-white/10 px-3 py-2 text-center text-stone-100 transition hover:border-amber-300/40 hover:text-amber-100" href="/">
+            <MiniAppLink className="rounded-full border border-white/10 px-3 py-2 text-center text-stone-100 transition hover:border-amber-300/40 hover:text-amber-100" href="/">
               トップ
-            </Link>
-            <Link className="rounded-full border border-white/10 px-3 py-2 text-center text-stone-100 transition hover:border-amber-300/40 hover:text-amber-100" href="/reserve">
+            </MiniAppLink>
+            <MiniAppLink className="rounded-full border border-white/10 px-3 py-2 text-center text-stone-100 transition hover:border-amber-300/40 hover:text-amber-100" href="/reserve">
               予約する
-            </Link>
-            <Link className="rounded-full border border-white/10 px-3 py-2 text-center text-stone-100 transition hover:border-amber-300/40 hover:text-amber-100" href="/reservation/check">
+            </MiniAppLink>
+            <MiniAppLink className="rounded-full border border-white/10 px-3 py-2 text-center text-stone-100 transition hover:border-amber-300/40 hover:text-amber-100" href="/reservation/check">
               予約確認
-            </Link>
-            <Link className="rounded-full border border-white/10 px-3 py-2 text-center text-stone-100 transition hover:border-amber-300/40 hover:text-amber-100" href="/reservation/manage">
+            </MiniAppLink>
+            <MiniAppLink className="rounded-full border border-white/10 px-3 py-2 text-center text-stone-100 transition hover:border-amber-300/40 hover:text-amber-100" href="/reservation/manage">
               変更・キャンセル
-            </Link>
+            </MiniAppLink>
           </nav>
         </header>
         {children}
