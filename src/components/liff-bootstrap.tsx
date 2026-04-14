@@ -1,10 +1,26 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
+import { usePathname, useSearchParams } from "next/navigation";
 import { getOptionalEnv } from "@/lib/env";
+import { resolveLineEntryTarget, resolveTargetFromLiffState } from "@/lib/liff-routing";
 
 export function LiffBootstrap() {
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
+  const hasRedirected = useRef(false);
+
   useEffect(() => {
+    const entryTarget = resolveLineEntryTarget(searchParams.get("entry"));
+    const stateTarget = resolveTargetFromLiffState(searchParams.get("liff.state"));
+    const redirectTarget = entryTarget ?? stateTarget;
+
+    if (pathname === "/" && redirectTarget && redirectTarget !== pathname && !hasRedirected.current) {
+      hasRedirected.current = true;
+      window.location.replace(redirectTarget);
+      return;
+    }
+
     const liffId = getOptionalEnv("NEXT_PUBLIC_LIFF_ID");
     if (!liffId) {
       return;
@@ -38,7 +54,7 @@ export function LiffBootstrap() {
     return () => {
       cancelled = true;
     };
-  }, []);
+  }, [pathname, searchParams]);
 
   return null;
 }

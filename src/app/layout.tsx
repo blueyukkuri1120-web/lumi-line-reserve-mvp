@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Cormorant_Garamond, Manrope } from "next/font/google";
 import Script from "next/script";
+import { Suspense } from "react";
 import { LiffBootstrap } from "@/components/liff-bootstrap";
 import "./globals.css";
 
@@ -24,7 +25,9 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
   return (
     <html lang="ja" className={`${bodyFont.variable} ${displayFont.variable}`}>
       <body className="antialiased">
-        <LiffBootstrap />
+        <Suspense fallback={null}>
+          <LiffBootstrap />
+        </Suspense>
         {children}
       </body>
       <Script src="https://static.line-scdn.net/liff/edge/2/sdk.js" strategy="afterInteractive" />
