@@ -52,18 +52,9 @@ export function useLiffProfile(liffId?: string) {
       }
 
       try {
-        await window.liff.init({
-          liffId,
-          withLoginOnExternalBrowser: true,
-        });
+        await window.liff.init({ liffId });
         const isInClient = window.liff.isInClient();
         const isLoggedIn = window.liff.isLoggedIn();
-
-        if (!isLoggedIn) {
-          window.liff.login();
-          return;
-        }
-
         const profile = isLoggedIn ? await window.liff.getProfile() : undefined;
 
         if (!cancelled) {
