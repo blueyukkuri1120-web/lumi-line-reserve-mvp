@@ -1,27 +1,58 @@
 "use client";
 
-import { startTransition, useEffect, useRef } from "react";
-import { usePathname, useRouter, useSearchParams } from "next/navigation";
-import { resolveLineEntryTarget, resolveTargetFromLiffState } from "@/lib/liff-routing";
+import { useEffect } from "react";
+import { usePathname } from "next/navigation";
+import { getOptionalEnv } from "@/lib/env";
 
 export function LiffBootstrap() {
-  const router = useRouter();
   const pathname = usePathname();
-  const searchParams = useSearchParams();
-  const hasRedirected = useRef(false);
 
   useEffect(() => {
-    const entryTarget = resolveLineEntryTarget(searchParams.get("entry"));
-    const stateTarget = resolveTargetFromLiffState(searchParams.get("liff.state"));
-    const redirectTarget = entryTarget ?? stateTarget;
-
-    if (pathname === "/" && redirectTarget && redirectTarget !== pathname && !hasRedirected.current) {
-      hasRedirected.current = true;
-      startTransition(() => {
-        router.replace(redirectTarget);
-      });
+    if (pathname !== "/") {
+      return;
     }
-  }, [pathname, router, searchParams]);
+
+    const liffId = getOptionalEnv("NEXT_PUBLIC_LIFF_ID");
+    if (!liffId) {
+      return;
+    }
+
+    const hasPrimaryRedirectParams =
+      window.location.search.includes("liff.state=") || window.location.hash.includes("access_token=");
+
+    if (!hasPrimaryRedirectParams) {
+      return;
+    }
+
+    let cancelled = false;
+    let attempts = 0;
+
+    const boot = async () => {
+      if (cancelled) {
+        return;
+      }
+
+      if (!window.liff) {
+        if (attempts < 20) {
+          attempts += 1;
+          window.setTimeout(boot, 200);
+        }
+        return;
+      }
+
+      try {
+        await window.liff.init({ liffId });
+      } catch (error) {
+        console.error("LIFF bootstrap failed", error);
+      }
+    };
+
+    void boot();
+
+    return () => {
+      cancelled = true;
+    };
+  }, [pathname]);
 
   return null;
 }
