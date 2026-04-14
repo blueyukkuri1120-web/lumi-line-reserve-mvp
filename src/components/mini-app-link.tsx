@@ -1,7 +1,20 @@
-"use client";
+import Link from "next/link";
+import { ReactNode } from "react";
+import { getOptionalEnv } from "@/lib/env";
 
-import { useRouter } from "next/navigation";
-import { MouseEvent, ReactNode } from "react";
+function buildPermanentLink(path: string) {
+  const liffId = getOptionalEnv("NEXT_PUBLIC_LIFF_ID");
+  if (!liffId) {
+    return path;
+  }
+
+  if (path === "/") {
+    return `https://miniapp.line.me/${liffId}`;
+  }
+
+  const normalized = path.startsWith("/") ? path : `/${path}`;
+  return `https://miniapp.line.me/${liffId}${normalized}`;
+}
 
 export function MiniAppLink({
   href,
@@ -12,16 +25,11 @@ export function MiniAppLink({
   className?: string;
   children: ReactNode;
 }) {
-  const router = useRouter();
-
-  const handleClick = (event: MouseEvent<HTMLAnchorElement>) => {
-    event.preventDefault();
-    router.push(href);
-  };
+  const targetHref = buildPermanentLink(href);
 
   return (
-    <a className={className} href={href} onClick={handleClick}>
+    <Link className={className} href={targetHref}>
       {children}
-    </a>
+    </Link>
   );
 }
