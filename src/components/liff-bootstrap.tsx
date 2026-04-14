@@ -74,6 +74,8 @@ export function LiffBootstrap() {
       return;
     }
 
+    const initialTarget = resolveLineTarget(new URLSearchParams(window.location.search).get("liff.state"));
+
     let cancelled = false;
     let attempts = 0;
 
@@ -92,10 +94,8 @@ export function LiffBootstrap() {
 
       try {
         await window.liff.init({ liffId });
-
-        const target = resolveLineTarget(new URLSearchParams(window.location.search).get("liff.state"));
-        if (target !== pathname) {
-          window.location.replace(target);
+        if (initialTarget !== pathname) {
+          window.location.replace(initialTarget);
         }
       } catch (error) {
         console.error("LIFF bootstrap failed", error);
