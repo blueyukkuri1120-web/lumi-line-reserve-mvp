@@ -67,46 +67,11 @@ export function LiffBootstrap() {
       return;
     }
 
-    const hasPrimaryRedirectParams =
-      window.location.search.includes("liff.state=") || window.location.hash.includes("access_token=");
-
-    if (!hasPrimaryRedirectParams) {
-      return;
-    }
-
     const initialTarget = resolveLineTarget(new URLSearchParams(window.location.search).get("liff.state"));
 
-    let cancelled = false;
-    let attempts = 0;
-
-    const boot = async () => {
-      if (cancelled) {
-        return;
-      }
-
-      if (!window.liff) {
-        if (attempts < 20) {
-          attempts += 1;
-          window.setTimeout(boot, 200);
-        }
-        return;
-      }
-
-      try {
-        await window.liff.init({ liffId });
-        if (initialTarget !== pathname) {
-          window.location.replace(initialTarget);
-        }
-      } catch (error) {
-        console.error("LIFF bootstrap failed", error);
-      }
-    };
-
-    void boot();
-
-    return () => {
-      cancelled = true;
-    };
+    if (initialTarget !== pathname) {
+      window.location.replace(initialTarget);
+    }
   }, [pathname]);
 
   return null;
