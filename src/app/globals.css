@@ -1,0 +1,20 @@
+@import "tailwindcss";
+
+:root {
+  color-scheme: light;
+}
+
+html {
+  min-height: 100%;
+  scroll-behavior: smooth;
+}
+
+body {
+  min-height: 100vh;
+  font-family: var(--font-body), "Hiragino Sans", "Noto Sans JP", sans-serif;
+  background: #f7f4ee;
+}
+
+.font-serif {
+  font-family: var(--font-display), "Times New Roman", serif;
+}
